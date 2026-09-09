@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TrailMeteo" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="app.css" />
+  <title>TrailMeteo</title>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">TRAIL WEATHER INTELLIGENCE</div>
+      <h1>TrailMeteo</h1>
+    </div>
+    <button id="locateBtn" class="iconBtn" aria-label="Usar mi ubicación">◎</button>
+  </header>
+
+  <main>
+    <section class="searchPanel card">
+      <div class="searchRow">
+        <input id="placeSearch" placeholder="Buscar pueblo, cima o localidad…" autocomplete="off" />
+        <button id="searchBtn">Buscar</button>
+      </div>
+      <div id="searchResults" class="searchResults hidden"></div>
+      <div id="placeMeta" class="muted">Selecciona una ubicación o usa tu GPS.</div>
+    </section>
+
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab active" data-tab="now">Ahora</button>
+      <button class="tab" data-tab="route">GPX</button>
+      <button class="tab" data-tab="radar">Radar</button>
+      <button class="tab" data-tab="models">Modelos</button>
+      <button class="tab" data-tab="settings">Ajustes</button>
+    </nav>
+
+    <section id="tab-now" class="tabPane active">
+      <div id="heroWeather" class="hero card skeleton">Carga una ubicación para empezar.</div>
+      <div id="bestWindows" class="card"></div>
+      <div id="hourly" class="card"></div>
+    </section>
+
+    <section id="tab-route" class="tabPane">
+      <div class="card">
+        <div class="sectionTitleRow"><h2>Ruta GPX</h2><span class="badge">ANÁLISIS ESPACIO‑TEMPORAL</span></div>
+        <p class="muted">Importa un GPX. TrailMeteo estima tu paso por cada tramo y consulta la meteorología prevista en esos puntos y horas.</p>
+        <label class="fileBtn">Importar GPX<input id="gpxInput" type="file" accept=".gpx,application/gpx+xml" hidden></label>
+        <div class="routeControls">
+          <label>Salida <input id="startTime" type="datetime-local"></label>
+          <label>Ritmo llano <input id="flatPace" type="number" min="3" max="20" step="0.1" value="6.5"> min/km</label>
+          <label>Penalización ascenso <input id="climbPenalty" type="number" min="0" max="30" step="0.5" value="8"> min/100 m+</label>
+        </div>
+        <div id="routeSummary" class="summaryGrid"></div>
+      </div>
+      <div id="routeMap" class="map card"></div>
+      <div id="routeWindows" class="card"></div>
+      <div id="routeRiskTable" class="card"></div>
+    </section>
+
+    <section id="tab-radar" class="tabPane">
+      <div class="card">
+        <div class="sectionTitleRow"><h2>Radar de precipitación</h2><span id="radarTime" class="badge">—</span></div>
+        <input id="radarSlider" type="range" min="0" max="0" value="0" step="1" />
+        <div class="radarButtons"><button id="radarPlay">▶︎ Animar</button><button id="radarLatest">Último</button></div>
+      </div>
+      <div id="radarMap" class="map card"></div>
+      <div class="card smallText">Radar compuesto: RainViewer. La capa se usa para observación/nowcasting de muy corto plazo; no sustituye avisos oficiales.</div>
+    </section>
+
+    <section id="tab-models" class="tabPane">
+      <div class="card">
+        <div class="sectionTitleRow"><h2>Triangulación</h2><span id="confidenceBadge" class="badge">—</span></div>
+        <p class="muted">Compara modelos independientes y muestra dispersión. No se cuentan como votos distintos productos derivados de la misma base cuando puede evitarse.</p>
+        <div id="modelCards" class="modelGrid"></div>
+      </div>
+      <div id="modelChart" class="card"></div>
+    </section>
+
+    <section id="tab-settings" class="tabPane">
+      <div class="card">
+        <h2>Fuentes</h2>
+        <div class="sourceRow"><b>Open‑Meteo</b><span>Modelos y geocodificación · activo</span></div>
+        <div class="sourceRow"><b>ECMWF / ICON / GFS / GEM</b><span>Comparación individual · activo</span></div>
+        <div class="sourceRow"><b>RainViewer</b><span>Radar compuesto · activo</span></div>
+        <div class="sourceRow"><b>AEMET OpenData</b><span id="aemetStatus">API key opcional · observaciones oficiales</span></div>
+        <div class="sourceRow"><b>meteoblue</b><span id="meteoblueStatus">API key opcional · consenso mLM</span></div>
+      </div>
+      <div class="card">
+        <h2>Claves opcionales</h2>
+        <label>AEMET API key<input id="aemetKey" type="password" placeholder="No se envía a TrailMeteo"></label>
+        <label>meteoblue API key<input id="meteoblueKey" type="password" placeholder="Opcional"></label>
+        <button id="saveKeys">Guardar solo en este dispositivo</button>
+        <p class="muted smallText">En una PWA puramente cliente una clave incluida en el navegador puede ser inspeccionable. Para una publicación pública, AEMET/meteoblue deberían pasar por un pequeño backend/proxy.</p>
+      </div>
+      <div class="card">
+        <h2>Cómo leer el Trail Score</h2>
+        <p>El score 0–100 penaliza precipitación, probabilidad de lluvia, rachas, baja visibilidad, CAPE/inestabilidad, extremos térmicos y UV. Es un indicador de decisión deportiva, no un aviso de seguridad oficial.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>TrailMeteo · prototipo PWA orientado a trail running</footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>

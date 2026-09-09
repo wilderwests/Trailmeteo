@@ -1,0 +1,21 @@
+{
+  "name": "TrailMeteo",
+  "short_name": "TrailMeteo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07101d",
+  "theme_color": "#07101d",
+  "description": "Predicción meteorológica orientada a trail running, radar, triangulación de modelos y análisis GPX.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
