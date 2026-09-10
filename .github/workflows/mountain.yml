@@ -1,11 +1,11 @@
 name: Actualizar boletines de montaña
 on:
   schedule:
-    - cron: '23 */3 * * *'
+    - cron: '23 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['scripts/update-mountain.py', '.github/workflows/mountain.yml']
+    paths: ['scripts/**', '.github/workflows/mountain.yml', '*.js', '*.css', '*.html']
 permissions:
   contents: read
   pages: write
@@ -21,13 +21,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Comprobar aplicación
+        run: |
+          npm install --ignore-scripts
+          npm test
+          python3 tests/alerts.test.py
       - name: Obtener boletines oficiales
-        run: python3 scripts/update-mountain.py
+        run: |
+          python3 scripts/update-mountain.py
+          python3 scripts/update-alerts.py
       - name: Preparar web
         run: |
           mkdir -p public/data
           cp *.html *.css *.js *.png manifest.webmanifest public/
-          cp data/mountain.json public/data/
+          cp data/*.json public/data/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
