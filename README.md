@@ -28,3 +28,9 @@ No se envía el GPX completo a un servidor. La consulta meteorológica envía co
 
 ## Verificación
 Pruebas de cálculo (`tests/core.test.cjs`) y pruebas de integración con DOM simulado (`tests/integration.mjs`, happy-dom y xmldom). Incluyen ceros, nulos, tormenta, fecha fuera de rango, 10.001 puntos, discontinuidades, namespaces, GPX malformado, importación, 16 sectores y falta de conexión. Además se comprueban respuestas reales de las APIs y de imágenes radar. Estas pruebas no equivalen a una validación de campo ni a pruebas en todos los móviles.
+
+
+## Actualización 3
+Mapa base OpenStreetMap sin clave, interfaz clara y tipografía ampliada, previsión diaria de siete días, amanecer/ocaso, UV e isoterma cero.
+
+La pestaña Montaña incorpora los XML públicos de AEMET, con atribución y fecha de validez. Un workflow consulta nueve zonas cada tres horas y publica el resultado en Pages. Algunas zonas pueden no tener boletín en la temporada actual; la app indica la ausencia y no realiza el cruce. La comparación de precipitación con los modelos es por reglas, exige datos del mismo día y comprueba proximidad aproximada, no límites oficiales. Las fuentes pueden compartir datos. La IA generativa local sigue siendo opcional y depende del navegador.
