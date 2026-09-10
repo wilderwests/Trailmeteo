@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');const p=require('../public-sources.js');
+const markdown='## [Ruta Mesones](https://es.wikiloc.com/rutas-senderismo/mesones-123)\n## [Mesones translated](https://www.wikiloc.com/hiking-trails/mesones-123)\n## [Blog Mesones](https://blog.example/mesones)';
+assert.equal(p.parseResults(markdown).length,2);
+assert.equal(p.family('https://sv.wikiloc.com/ruta'),'wikiloc.com');
+assert.equal(p.relevance({title:'Canal de televisión en Europa',url:'https://blog.example/tv'},'Canal de Mesones Picos de Europa'),0);
+assert.equal(p.extractText('Markdown Content:\n\nLa canal ofrece unas vistas de los Picos de Europa y esta página contiene anuncios y rutas de televisión.','Mesones'),null);
+assert.equal(p.extractText('Access denied: verify you are human','Mesones'),null);
+assert.equal(p.safeURL('https://user:pass@example.com'),null);
+const narrative='Mesones es el itinerario descrito. El sendero comienza junto al puente y asciende por una ladera de terreno pedregoso hasta el collado.';
+assert.match(p.extractText('## Descripción del itinerario\n\n'+narrative+'\n\n## Rutas cercanas\n\nMesones y más rutas con senderos de publicidad para descargar aplicaciones de rutas.','Mesones'),/comienza junto/);
+assert.doesNotMatch(p.extractText('## Descripción del itinerario\n\n'+narrative+'\n\n## Rutas cercanas\n\nMesones y más rutas con senderos de publicidad para descargar aplicaciones de rutas.','Mesones'),/publicidad/);
+(async()=>{let calls=0;global.fetch=async url=>{calls++;if(url.includes('duckduckgo'))return {ok:true,text:async()=>['bad','good','third','fourth'].map(h=>`## [Mesones ${h}](https://${h}.example/mesones)`).join('\n')};if(url.includes('bad.example'))throw Error('Blocked');return {ok:true,text:async()=>narrative}};let result=await p.search('Mesones',new AbortController().signal);assert.equal(result.sources.filter(x=>x.status==='read').length,3);assert.equal(result.sources.filter(x=>x.status==='failed').length,1);const before=calls;result=await p.search('Mesones',new AbortController().signal);assert.equal(result.cached,true);assert.equal(calls,before);console.log('Public sources: translated duplicates, relevance, body extraction, blocked sources, replacements and query cache passed');})().catch(e=>{console.error(e);process.exitCode=1});
