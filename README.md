@@ -67,3 +67,8 @@ La geolocalización se usa localmente; las coordenadas meteorológicas se envía
 ### Validación
 
 `npm test` comprueba regresiones originales, geometría y temporalidad CAP, ausencia de datos, ambigüedad de caminos, composición de todos los módulos, navegación, almacenamiento, recuperación y comparación offline. `python3 tests/alerts.test.py` comprueba el lector CAP. Los escenarios automatizados usan datos controlados; no sustituyen pruebas sobre terreno ni garantizan continuidad de las APIs gratuitas.
+
+## Versión 5: Qwen y documentación
+Qwen local se reutiliza entre plan de ruta, evidencias cartográficas, boletín AEMET y documentación. Generación solo al pulsar, exclusión mutua con la IA anterior y caché de 12 explicaciones para datos idénticos. El texto generado puede equivocarse y se separa de la documentación original. No consume créditos de Codex al funcionar en el dispositivo del visitante.
+
+Primera ficha revisada: Canal de Trea, con resúmenes atribuidos al refugio Vega de Ario, una reseña Wikiloc y un aviso histórico del Parque. Selección por nombre, no identidad geográfica del GPX. Las rutas sin ficha pueden buscar contexto enciclopédico mediante la API pública de Wikipedia; no equivale a búsqueda web universal ni a una reseña técnica. Las fichas no se actualizan automáticamente, conservan fecha de revisión y límites.
