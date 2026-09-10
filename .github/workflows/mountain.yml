@@ -1,0 +1,36 @@
+name: Actualizar boletines de montaña
+on:
+  schedule:
+    - cron: '23 */3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/update-mountain.py', '.github/workflows/mountain.yml']
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: mountain-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Obtener boletines oficiales
+        run: python3 scripts/update-mountain.py
+      - name: Preparar web
+        run: |
+          mkdir -p public/data
+          cp *.html *.css *.js *.png manifest.webmanifest public/
+          cp data/mountain.json public/data/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,697 @@
+{
+  "fetched": "2026-09-10T07:45:02.730302+00:00",
+  "source": "AEMET",
+  "zones": [
+    {
+      "code": "peu1",
+      "name": "Picos de Europa",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=peu1",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_peu1.xml",
+      "issued": "2026-09-09T15:05:57",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Intervalos nubosos, con nubes medias y altas."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "Mínimas en ligero descenso. Máximas en ascenso moderado."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Flojo con predominio de noroeste, ocasionalmente moderado en cotas altas y zonas expuestas."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "3900 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "5900 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "VRB 10 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "NW 20 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Vega de Urriellu",
+          "elevation": "1970 m",
+          "minima": "10",
+          "stminima": "8",
+          "maxima": "12",
+          "stmaxima": "12"
+        },
+        {
+          "name": "Vega de Ario",
+          "elevation": "1649 m",
+          "minima": "9",
+          "stminima": "9",
+          "maxima": "13",
+          "stmaxima": "13"
+        },
+        {
+          "name": "Lagos de Covadonga",
+          "elevation": "1080 m",
+          "minima": "10",
+          "stminima": "10",
+          "maxima": "16",
+          "stmaxima": "16"
+        },
+        {
+          "name": "Cabaña Verónica",
+          "elevation": "2239 m",
+          "minima": "9",
+          "stminima": "7",
+          "maxima": "10",
+          "stmaxima": "10"
+        },
+        {
+          "name": "Mirador del Cable",
+          "elevation": "1919 m",
+          "minima": "9",
+          "stminima": "9",
+          "maxima": "12",
+          "stmaxima": "12"
+        },
+        {
+          "name": "Tresviso",
+          "elevation": "889 m",
+          "minima": "11",
+          "stminima": "11",
+          "maxima": "15",
+          "stmaxima": "15"
+        }
+      ]
+    },
+    {
+      "code": "arn1",
+      "name": "Pirineo Aragonés",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=arn1",
+      "xml": "https://www.aemet.es/xml/montana/p18tarn1.xml",
+      "issued": null,
+      "from": null,
+      "to": null,
+      "fields": [],
+      "places": []
+    },
+    {
+      "code": "cat1",
+      "name": "Pirineo Catalán",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=cat1",
+      "xml": "https://www.aemet.es/xml/montana/p18tcat1.xml",
+      "issued": null,
+      "from": null,
+      "to": null,
+      "fields": [],
+      "places": []
+    },
+    {
+      "code": "nav1",
+      "name": "Pirineo Navarro",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=nav1",
+      "xml": "https://www.aemet.es/xml/montana/p18tnav1.xml",
+      "issued": null,
+      "from": null,
+      "to": null,
+      "fields": [],
+      "places": []
+    },
+    {
+      "code": "arn2",
+      "name": "Ibérica Aragonesa",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=arn2",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_arn2.xml",
+      "issued": "2026-09-09T11:55:45",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Poco nuboso o despejado, con velos de nubes altas."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "Mínimas en ligero o moderado descenso, y máximas en moderado ascenso."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Flojo o moderado, predominantemente del norte y noroeste."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "3800 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "5600 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "NW 10 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "N 25 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Pico Moncayo",
+          "elevation": "2316 m",
+          "minima": "8",
+          "stminima": "5",
+          "maxima": "12",
+          "stmaxima": "12"
+        },
+        {
+          "name": "Aranda de Moncayo",
+          "elevation": "860 m",
+          "minima": "9",
+          "stminima": "8",
+          "maxima": "24",
+          "stmaxima": "24"
+        },
+        {
+          "name": "Pico Nevera (S. Vicort)",
+          "elevation": "1411 m",
+          "minima": "8",
+          "stminima": "6",
+          "maxima": "17",
+          "stmaxima": "17"
+        },
+        {
+          "name": "Mo. de Piedra (Nuévalos)",
+          "elevation": "707 m",
+          "minima": "10",
+          "stminima": "10",
+          "maxima": "25",
+          "stmaxima": "25"
+        },
+        {
+          "name": "Est. Esq. Valdelinares",
+          "elevation": "1975 m",
+          "minima": "6",
+          "stminima": "1",
+          "maxima": "15",
+          "stmaxima": "15"
+        },
+        {
+          "name": "Pico Javalambre",
+          "elevation": "2020 m",
+          "minima": "7",
+          "stminima": "3",
+          "maxima": "14",
+          "stmaxima": "14"
+        },
+        {
+          "name": "Frías de Albarracín",
+          "elevation": "1462 m",
+          "minima": "6",
+          "stminima": "6",
+          "maxima": "20",
+          "stmaxima": "20"
+        },
+        {
+          "name": "Cantavieja",
+          "elevation": "1305 m",
+          "minima": "7",
+          "stminima": "4",
+          "maxima": "18",
+          "stmaxima": "18"
+        }
+      ]
+    },
+    {
+      "code": "rio1",
+      "name": "Ibérica Riojana",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=rio1",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_rio1.xml",
+      "issued": "2026-09-09T11:55:43",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Nuboso a primeras horas, con predominio de las nubes bajas, tendiendo a despejar a lo largo de la mañana."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "Mínimas en ligero descenso, y máximas en moderado ascenso, localmente notable."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Flojo o moderado, predominantemente del norte y noroeste."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "3500 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "5300 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "N 10 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "N 20 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Valdezcaray",
+          "elevation": "1620 m",
+          "minima": "4",
+          "stminima": "3",
+          "maxima": "14",
+          "stmaxima": "14"
+        },
+        {
+          "name": "Pico Urbión",
+          "elevation": "2229 m",
+          "minima": "10",
+          "stminima": "8",
+          "maxima": "12",
+          "stmaxima": "12"
+        },
+        {
+          "name": "Villanueva de Cameros",
+          "elevation": "933 m",
+          "minima": "7",
+          "stminima": "6",
+          "maxima": "18",
+          "stmaxima": "18"
+        },
+        {
+          "name": "Peña Isasa",
+          "elevation": "1475 m",
+          "minima": "6",
+          "stminima": "2",
+          "maxima": "15",
+          "stmaxima": "15"
+        }
+      ]
+    },
+    {
+      "code": "gre1",
+      "name": "Sierra de Gredos",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=gre1",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_gre1.xml",
+      "issued": "2026-09-09T15:06:18",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Poco nuboso o despejado, con velos de nubes altas, salvo por algún intervalo de nubes medias por la tarde."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "Mínimas en ligero o moderado descenso. Máximas en ligero o moderado ascenso."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Generalmente en régimen de brisas. En cotas altas y zonas expuestas soplará flojo con intervalos de moderado, predominando la componente norte."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "4300 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "6100 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "VRB 5 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "N 15 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Plataforma de Gredos",
+          "elevation": "1765 m",
+          "minima": "10",
+          "stminima": "7",
+          "maxima": "19",
+          "stmaxima": "19"
+        },
+        {
+          "name": "El Barco de Ávila",
+          "elevation": "1016 m",
+          "minima": "11",
+          "stminima": "11",
+          "maxima": "23",
+          "stmaxima": "23"
+        },
+        {
+          "name": "Piedrahíta",
+          "elevation": "1065 m",
+          "minima": "11",
+          "stminima": "11",
+          "maxima": "23",
+          "stmaxima": "23"
+        },
+        {
+          "name": "La Serrota",
+          "elevation": "2294 m",
+          "minima": "10",
+          "stminima": "10",
+          "maxima": "13",
+          "stmaxima": "13"
+        },
+        {
+          "name": "Pico Almanzor",
+          "elevation": "2592 m",
+          "minima": "8",
+          "stminima": "8",
+          "maxima": "13",
+          "stmaxima": "13"
+        },
+        {
+          "name": "La Hoya (La Covatilla)",
+          "elevation": "1950 m",
+          "minima": "9",
+          "stminima": "6",
+          "maxima": "15",
+          "stmaxima": "15"
+        }
+      ]
+    },
+    {
+      "code": "nev1",
+      "name": "Sierra Nevada",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=nev1",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_nev1.xml",
+      "issued": "2026-09-09T11:56:10",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Intervalos nubosos, con nubes bajas y de evolución diurna."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "Probables chubascos dispersos y ocasionales, en general de poca entidad, aunque podrían ser más intensos de madrugada."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "Podrán acompañar a los chubascos, sobre todo de madrugada."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "En ligero o moderado descenso, que podrá ser notable de las máximas en la Alpujarra."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Flojo o moderado con predominio de la componente norte, girando a componente sur por la tarde en la Alpujarra."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "4300 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "5900 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "VRB 10 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "N 20 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Pradollano",
+          "elevation": "2165 m",
+          "minima": "10",
+          "stminima": "10",
+          "maxima": "15",
+          "stmaxima": "15"
+        },
+        {
+          "name": "Borreguiles",
+          "elevation": "2665 m",
+          "minima": "6",
+          "stminima": "4",
+          "maxima": "11",
+          "stmaxima": "11"
+        }
+      ]
+    },
+    {
+      "code": "mad2",
+      "name": "Guadarrama y Somosierra",
+      "url": "https://www.aemet.es/es/eltiempo/prediccion/montana?p=mad2",
+      "xml": "https://www.aemet.es/xml/montana/20260910_predmmon_mad2.xml",
+      "issued": "2026-09-09T15:06:16",
+      "from": "2026-09-10T00:00:00",
+      "to": "2026-09-11T00:00:00",
+      "fields": [
+        {
+          "section": "prediccion",
+          "key": "nubosidad",
+          "title": "Estado del cielo",
+          "text": "Poco nuboso o despejado, con velos de nubes altas, salvo por algún intervalo de nubes medias por la tarde."
+        },
+        {
+          "section": "prediccion",
+          "key": "pcp",
+          "title": "Precipitaciones",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "tormentas",
+          "title": "Tormentas",
+          "text": "No se esperan."
+        },
+        {
+          "section": "prediccion",
+          "key": "temperatura",
+          "title": "Temperaturas",
+          "text": "Mínimas en moderado descenso. Máximas en ligero o moderado ascenso."
+        },
+        {
+          "section": "prediccion",
+          "key": "viento",
+          "title": "Viento",
+          "text": "Generalmente en régimen de brisas. En cotas altas y zonas expuestas soplará flojo con intervalos de moderado, predominando la componente norte."
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "isocero",
+          "title": "Altitud de la isoterma de 0 ºC en la atmósfera libre",
+          "text": "4100 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "iso10",
+          "title": "Altitud de la isoterma de -10 ºC en la atmósfera libre",
+          "text": "6100 m"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v1500",
+          "title": "Viento en atmósfera libre a 1500 metros",
+          "text": "VRB 5 km/h"
+        },
+        {
+          "section": "atmosferalibre",
+          "key": "v3000",
+          "title": "Viento en atmósfera libre a 3000 metros",
+          "text": "N 20 km/h"
+        }
+      ],
+      "places": [
+        {
+          "name": "Pto. de Navacerrada",
+          "elevation": "1860 m",
+          "minima": "9",
+          "stminima": "6",
+          "maxima": "15",
+          "stmaxima": "15"
+        },
+        {
+          "name": "Pto. de Somosierra",
+          "elevation": "1430 m",
+          "minima": "7",
+          "stminima": "5",
+          "maxima": "19",
+          "stmaxima": "19"
+        },
+        {
+          "name": "La Pinilla",
+          "elevation": "1800 m",
+          "minima": "8",
+          "stminima": "5",
+          "maxima": "16",
+          "stmaxima": "16"
+        },
+        {
+          "name": "Pico Peñalara",
+          "elevation": "2428 m",
+          "minima": "10",
+          "stminima": "7",
+          "maxima": "12",
+          "stmaxima": "12"
+        },
+        {
+          "name": "Alto de El León",
+          "elevation": "1500 m",
+          "minima": "8",
+          "stminima": "5",
+          "maxima": "18",
+          "stmaxima": "18"
+        },
+        {
+          "name": "Pico Ocejón",
+          "elevation": "2028 m",
+          "minima": "10",
+          "stminima": "8",
+          "maxima": "15",
+          "stmaxima": "15"
+        }
+      ]
+    }
+  ]
+}
