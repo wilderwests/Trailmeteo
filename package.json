@@ -1,12 +1,13 @@
 {
   "name": "trailmeteo",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "private": true,
   "scripts": {
-    "test": "node tests/core.test.cjs && node tests/integration.mjs"
+    "test": "node tests/core.test.cjs && node tests/integration.mjs && node tests/expedition.test.cjs && node tests/expedition-integration.mjs"
   },
   "devDependencies": {
     "happy-dom": "20.8.4",
-    "@xmldom/xmldom": "0.9.12"
+    "@xmldom/xmldom": "0.9.12",
+    "fake-indexeddb": "6.2.5"
   }
 }
