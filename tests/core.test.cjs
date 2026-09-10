@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict');
+const {finite,nearest,assess,stats,sample,eta,hours}=require('../core.js');
+assert.equal(finite(null),false);
+assert.equal(assess(null).level,'unknown');
+assert.equal(assess({temperature_2m:15,precipitation:null,wind_gusts_10m:2}).level,'unknown');
+assert.equal(assess({temperature_2m:0,apparent_temperature:0,precipitation:0,wind_gusts_10m:0,visibility:0}).level,'high');
+assert.equal(assess({temperature_2m:15,precipitation:0,wind_gusts_10m:0,weather_code:95}).level,'high');
+assert.equal(nearest([{time:1000}],7200000),null);
+assert.equal(hours({hourly:{time:[1789000000],temperature_2m:[0]}})[0].time,1789000000000);
+const pts=Array.from({length:10001},(_,i)=>({lat:43+i/100000,lon:-4,ele:i/10,segment:0}));
+const st=stats(pts),samples=sample(pts,16);assert.equal(samples.length,16);assert.equal(samples[0].idx,0);assert.equal(samples.at(-1).idx,10000);assert.ok(st.km>11&&st.km<11.2);assert.ok(st.up>=997&&st.up<=1000);
+const timed=eta(samples,1789000000000,8,10);assert.equal(timed.at(-1).eta,1789000000000+(st.km*8+pts.at(-1).up/100*10)*60000);
+const separated=[{lat:0,lon:0,ele:0,segment:0},{lat:0,lon:.001,ele:0,segment:0},{lat:80,lon:160,ele:0,segment:1},{lat:80,lon:160.001,ele:0,segment:1}];assert.ok(stats(separated).km<.2);
+assert.equal(stats([{lat:0,lon:0,ele:null,segment:0},{lat:0,lon:.001,ele:0,segment:0}]).elevationComplete,false);
+assert.throws(()=>eta(samples,NaN,8,10));
+console.log('Core regression checks passed: missing values, zero values, storm, forecast range, UTC, 10,001 points, complete-track ETA, segment gaps, missing elevations.');

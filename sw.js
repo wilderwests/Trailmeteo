@@ -1,8 +1,5 @@
-const CACHE='trailmeteo-v1';
-const CORE=['./','./index.html','./app.css','./app.js','./manifest.webmanifest'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE))));
-self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET') return;
-  e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request)));
-});
+const CACHE='trailmeteo-shell-v2.0.0';
+const CORE=['./','./index.html','./app.css?v=2','./app.js?v=2','./core.js?v=2','./leaflet.js','./leaflet.css','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('trailmeteo')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',event=>{const req=event.request,url=new URL(req.url);if(req.method!=='GET'||url.origin!==self.location.origin)return;event.respondWith(fetch(req).then(res=>{if(res.ok&&CORE.some(p=>new URL(p,self.registration.scope).href===url.href)){const copy=res.clone();event.waitUntil(caches.open(CACHE).then(c=>c.put(req,copy)))}return res}).catch(async()=>{const cached=await caches.match(req);if(cached)return cached;return new Response('Sin conexión. Este recurso no está guardado.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}})}))});
