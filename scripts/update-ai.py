@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -199,12 +200,14 @@ def ask_pollinations(data):
     except Exception as e:  # noqa: BLE001
         errors.append(f"POST: {e}")
     try:
-        import urllib.parse
         prompt = system + "\nDATOS: " + json.dumps(data["previsiones"][0]["dias"][:2], ensure_ascii=False)
         url = "https://text.pollinations.ai/" + urllib.parse.quote(prompt[:3500]) + "?model=openai&json=true"
         with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
             content = r.read().decode("utf-8")
-        parsed = normalize(parse_json(content))
+        obj = parse_json(content)
+        if isinstance(obj, dict) and isinstance(obj.get("content"), str):
+            obj = parse_json(obj["content"])
+        parsed = normalize(obj)
         if parsed:
             return "pollinations/openai", parsed
         errors.append(f"GET sin titular: {content[:200]!r}")
