@@ -10,6 +10,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  models: read
 concurrency:
   group: mountain-pages
   cancel-in-progress: false
@@ -30,11 +31,16 @@ jobs:
           npm test
           python3 tests/alerts.test.py
           python3 tests/dgt.test.py
+          python3 tests/ai.test.py
       - name: Obtener boletines oficiales
         run: |
           python3 scripts/update-mountain.py
           python3 scripts/update-alerts.py
           python3 scripts/update-dgt.py || true
+      - name: Parte de montaña con IA (GitHub Models)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/update-ai.py || true
       - name: Preparar web
         run: |
           mkdir -p public/data
