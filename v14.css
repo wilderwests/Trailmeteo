@@ -249,3 +249,5 @@ input::placeholder,textarea::placeholder{color:#6b767b}
 .rf-ticks{position:absolute;left:8px;right:8px;bottom:0;height:18px;font-size:.78rem;color:var(--muted)}.rf-ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
 .sky-hlbl{display:inline-block;min-width:120px;color:var(--ink);font-weight:700}
 .sky-stack{max-width:980px;margin-inline:auto}
+.gis-btn{display:flex;justify-content:center;min-height:44px;margin:6px 0}.gis-btn:empty{display:none}
+#accSheet.gis-on [data-acc="in"]{display:none}
