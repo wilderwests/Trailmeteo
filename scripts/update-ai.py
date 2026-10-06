@@ -184,15 +184,33 @@ def ask_pollinations(data):
               "riesgos (0-4 frases cortas), consejo (una frase), mejor_momento (frase corta). Español de España. No inventes cifras.")
     body = {"model": "openai", "temperature": 0.3, "messages": [
         {"role": "system", "content": system}, {"role": "user", "content": json.dumps(data, ensure_ascii=False)[:9000]}]}
-    req = urllib.request.Request("https://text.pollinations.ai/openai", data=json.dumps(body).encode("utf-8"),
-                                 headers={"Content-Type": "application/json", **UA})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        d = json.loads(r.read().decode("utf-8"))
-    content = d["choices"][0]["message"]["content"] or ""
-    parsed = normalize(parse_json(content))
-    if not parsed:
-        raise RuntimeError(f"respuesta sin titular: {content[:200]!r}")
-    return "pollinations/openai", parsed
+    errors = []
+    try:
+        req = urllib.request.Request("https://text.pollinations.ai/openai", data=json.dumps(body).encode("utf-8"),
+                                     headers={"Content-Type": "application/json", **UA})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            d = json.loads(r.read().decode("utf-8"))
+        msg = ((d.get("choices") or [{}])[0].get("message") or {})
+        content = msg.get("content") or ""
+        parsed = normalize(parse_json(content)) if content else None
+        if parsed:
+            return "pollinations/openai", parsed
+        errors.append(f"POST sin contenido útil: {json.dumps(d, ensure_ascii=False)[:200]}")
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"POST: {e}")
+    try:
+        import urllib.parse
+        prompt = system + "\nDATOS: " + json.dumps(data["previsiones"][0]["dias"][:2], ensure_ascii=False)
+        url = "https://text.pollinations.ai/" + urllib.parse.quote(prompt[:3500]) + "?model=openai&json=true"
+        with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+            content = r.read().decode("utf-8")
+        parsed = normalize(parse_json(content))
+        if parsed:
+            return "pollinations/openai", parsed
+        errors.append(f"GET sin titular: {content[:200]!r}")
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"GET: {e}")
+    raise RuntimeError(" | ".join(errors))
 
 
 def normalize(p):
