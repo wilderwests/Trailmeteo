@@ -39,6 +39,7 @@ class Normalize(unittest.TestCase):
         self.assertEqual(len(n["resumen"]), 3)
         self.assertEqual(n["riesgos"], ["Rachas"])
         self.assertIsNone(ai.normalize({"foo": 1}))
+        self.assertEqual(ai.normalize({"titular": "T.", "resumen": ["Isoterma a 3400 m.."]})["resumen"], ["Isoterma a 3400 m."])
         self.assertEqual(ai.normalize({"parte": {"titular": "X", "resumen": ["a", "b", "c"]}})["titular"], "X")
 
 
