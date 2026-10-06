@@ -9,6 +9,7 @@ Solo usa la librería estándar.
 import json
 import os
 import sys
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -21,7 +22,6 @@ POINTS = [
     ("Macizo Occidental (Covadonga · Vega de Ario)", 43.25, -4.98),
     ("Desfiladero del Cares (Poncebos · Caín)", 43.25, -4.85),
 ]
-MODELS = ["openai/gpt-4.1-mini", "openai/gpt-4o-mini"]
 UA = {"User-Agent": "TrailMeteo/13 (+https://github.com)"}
 
 
@@ -143,30 +143,55 @@ def ask_models(data, token):
     system = (
         "Eres un meteorólogo y guía de montaña de Picos de Europa. Redacta un parte breve, concreto y útil para "
         "excursionistas a partir SOLO de los datos JSON. No inventes cifras. Español de España. "
-        "Devuelve JSON con: titular (máx. 70 caracteres), resumen (lista de exactamente 3 frases cortas: hoy, mañana, "
-        "y la clave del día), riesgos (lista de 0-4 frases cortas), consejo (una frase), mejor_momento (frase corta)."
+        "Devuelve SOLO un objeto JSON con: titular (máx. 70 caracteres), resumen (lista de exactamente 3 frases cortas: "
+        "hoy, mañana y la clave del día), riesgos (lista de 0-4 frases cortas), consejo (una frase), mejor_momento (frase corta)."
     )
-    body = {
-        "messages": [{"role": "system", "content": system}, {"role": "user", "content": json.dumps(data, ensure_ascii=False)[:12000]}],
-        "temperature": 0.3, "max_tokens": 700, "response_format": {"type": "json_object"},
-    }
-    last = None
-    for model in MODELS:
+    messages = [{"role": "system", "content": system}, {"role": "user", "content": json.dumps(data, ensure_ascii=False)[:12000]}]
+    attempts = [
+        ("https://models.github.ai/inference/chat/completions", "openai/gpt-4.1-mini"),
+        ("https://models.github.ai/inference/chat/completions", "openai/gpt-4o-mini"),
+        ("https://models.inference.ai.azure.com/chat/completions", "gpt-4o-mini"),
+    ]
+    errors = []
+    for url, model in attempts:
+        raw = b""
         try:
-            req = urllib.request.Request(
-                "https://models.github.ai/inference/chat/completions",
-                data=json.dumps({**body, "model": model}).encode("utf-8"),
-                headers={"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json", **UA},
-            )
+            body = {"model": model, "messages": messages, "temperature": 0.3, "max_tokens": 700}
+            req = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), method="POST", headers={
+                "Authorization": "Bearer " + token, "Content-Type": "application/json",
+                "Accept": "application/json", "X-GitHub-Api-Version": "2022-11-28", **UA})
             with urllib.request.urlopen(req, timeout=60) as r:
-                d = json.loads(r.read().decode("utf-8"))
-            text = d["choices"][0]["message"]["content"] or ""
-            parsed = parse_json(text)
+                raw = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    import gzip
+                    raw = gzip.decompress(raw)
+            d = json.loads(raw.decode("utf-8"))
+            parsed = parse_json(d["choices"][0]["message"]["content"] or "")
             if parsed.get("titular") and isinstance(parsed.get("resumen"), list):
                 return model, parsed
+            errors.append(f"{model}: respuesta sin titular")
+        except urllib.error.HTTPError as e:
+            errors.append(f"{model}@{url.split('/')[2]}: HTTP {e.code} {e.read()[:160]!r}")
         except Exception as e:  # noqa: BLE001 - se informa y se prueba el siguiente
-            last = f"{model}: {e}" + (f" · respuesta: {text[:160]!r}" if "text" in locals() and text else "")
-    raise RuntimeError(f"GitHub Models no disponible: {last}")
+            errors.append(f"{model}@{url.split('/')[2]}: {e} · cuerpo {raw[:160]!r}")
+    raise RuntimeError("GitHub Models no disponible: " + " | ".join(errors))
+
+
+def ask_pollinations(data):
+    """IA comunitaria sin clave (Pollinations): una sola petición por despliegue."""
+    system = ("Eres un meteorólogo y guía de montaña de Picos de Europa. A partir SOLO de los datos JSON, devuelve SOLO un "
+              "objeto JSON con: titular (máx. 70 caracteres), resumen (exactamente 3 frases cortas: hoy, mañana y la clave), "
+              "riesgos (0-4 frases cortas), consejo (una frase), mejor_momento (frase corta). Español de España. No inventes cifras.")
+    body = {"model": "openai", "temperature": 0.3, "messages": [
+        {"role": "system", "content": system}, {"role": "user", "content": json.dumps(data, ensure_ascii=False)[:9000]}]}
+    req = urllib.request.Request("https://text.pollinations.ai/openai", data=json.dumps(body).encode("utf-8"),
+                                 headers={"Content-Type": "application/json", **UA})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        d = json.loads(r.read().decode("utf-8"))
+    parsed = parse_json(d["choices"][0]["message"]["content"] or "")
+    if not (parsed.get("titular") and isinstance(parsed.get("resumen"), list)):
+        raise RuntimeError("respuesta sin titular")
+    return "pollinations/openai", parsed
 
 
 def main():
@@ -184,7 +209,14 @@ def main():
             model, parte = ask_models(data, token)
             source = "github-models"
         except Exception as e:  # noqa: BLE001
-            print(f"Parte IA: {e}; uso reglas")
+            print(f"Parte IA: {e}")
+    if source == "reglas":
+        try:
+            model, parte = ask_pollinations(data)
+            source = "pollinations"
+        except Exception as e:  # noqa: BLE001
+            print(f"Parte IA: IA comunitaria no disponible ({e}); uso reglas")
+            parte = rules(data)
     out = {"generated": now.isoformat(), "valid_until": (now + timedelta(hours=6)).isoformat(), "source": source,
            "model": model, "zone": "Picos de Europa", **parte,
            "data": {"zonas": [{"zona": p["zona"], "hoy": p["dias"][0]} for p in data["previsiones"]]}}
