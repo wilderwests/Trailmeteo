@@ -180,3 +180,39 @@ button,input,select,textarea{font-family:var(--body)}
 .rs-kg .rs-kpi:last-child{border-right:0}
 @media (max-width:1100px){.rs-groups-k{grid-template-columns:1fr 1fr}}
 @media (max-width:620px){.rs-groups-k{grid-template-columns:1fr}}
+
+/* ---------- 14.1 · Plus Jakarta Sans, texto más grande, menú más visible, sin 3D ---------- */
+:root{font-size:19px}
+h1,h2,h3{letter-spacing:-.02em;font-weight:700}
+.splash-tag,.hm-lead,.g-lead,.fu-lead{font-style:normal;font-weight:500}
+.footnote,.fu-hint,.rs-age,.finder-hint{font-size:.86rem}
+.rs-kpi span,.fu-k span,.rs-risks span,.rs-times-list em,.wl-meta span{font-size:.86rem}
+.rs-times-list span,.rs-vtext p,.route-advice{font-size:1rem}
+.eyebrow,.rs-kicker,.hm-kicker,.mn-label,.sm-label{font-size:.72rem!important}
+.mainnav{padding:10px max(3vw,14px) 12px;background:color-mix(in srgb,var(--paper) 94%,transparent)}
+.mainnav button{font-size:.98rem!important;font-weight:600;color:var(--ink);padding:8px 12px!important;border-radius:999px;box-shadow:none}
+.mainnav button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent);box-shadow:none}
+.mainnav button.on{background:var(--ink);color:var(--paper);box-shadow:none}
+#flyRoute,#cnFly,[data-rs-do="fly"]{display:none!important}
+@media (min-width:1000px){.mainnav{flex-wrap:wrap!important;overflow:visible!important;row-gap:4px}.mainnav [data-nav="home"]{display:none}}
+/* Comparación de modelos tipo Windy */
+.mg-step{display:flex;gap:6px}.mg-step button{min-height:36px;padding:4px 12px;font-size:.85rem}.mg-step button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.mg-scroll{overflow-x:auto;margin-top:12px;border-top:1px solid var(--rule)}
+.mg{border-collapse:collapse;font-size:.82rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mg th,.mg td{padding:4px 6px;text-align:center;border-bottom:1px solid color-mix(in srgb,var(--ink) 6%,transparent);min-width:34px}
+.mg th{font-weight:600;color:var(--ink-2)}
+.mg th small{display:block;font-size:.66rem;color:var(--muted);font-weight:700;text-transform:capitalize}
+.mg .mg-day{border-left:2px solid var(--rule-strong)}
+.mg-sticky{position:sticky;left:0;z-index:1;background:var(--paper);text-align:left!important;min-width:110px}
+.mg-var th{padding-top:12px;font-size:.9rem;color:var(--ink);font-weight:800}
+.mg-var td{border-bottom:0}
+.mg-model{font-weight:500!important;color:var(--muted)!important}
+.mg-dir{display:block;font-style:normal;font-size:.7rem;line-height:1;color:var(--ink-2)}
+/* Legibilidad: más contraste, peso y aire */
+:root{--muted:#4f5b61;--ink-2:#1f2a30;--dim:#6b767b}
+body{font-weight:500;line-height:1.6;-webkit-font-smoothing:antialiased}
+p,li,dd,td{line-height:1.6}
+.footnote,.muted,.fu-hint{color:#4f5b61}
+.bd-veil{background:color-mix(in srgb,var(--bg) 82%,transparent)!important}
+.pane,.home-screen{text-shadow:none}
+input::placeholder,textarea::placeholder{color:#6b767b}
