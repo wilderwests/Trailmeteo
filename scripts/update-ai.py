@@ -188,10 +188,32 @@ def ask_pollinations(data):
                                  headers={"Content-Type": "application/json", **UA})
     with urllib.request.urlopen(req, timeout=60) as r:
         d = json.loads(r.read().decode("utf-8"))
-    parsed = parse_json(d["choices"][0]["message"]["content"] or "")
-    if not (parsed.get("titular") and isinstance(parsed.get("resumen"), list)):
-        raise RuntimeError("respuesta sin titular")
+    content = d["choices"][0]["message"]["content"] or ""
+    parsed = normalize(parse_json(content))
+    if not parsed:
+        raise RuntimeError(f"respuesta sin titular: {content[:200]!r}")
     return "pollinations/openai", parsed
+
+
+def normalize(p):
+    """Acepta variantes de claves (titular/title/headline, resumen/summary…) y listas o texto."""
+    if not isinstance(p, dict):
+        return None
+    if len(p) == 1 and isinstance(next(iter(p.values())), dict):
+        p = next(iter(p.values()))
+    low = {str(k).lower().strip(): v for k, v in p.items()}
+    pick = lambda *keys: next((low[k] for k in keys if low.get(k)), None)
+    titular = pick("titular", "title", "headline", "titulo", "título")
+    resumen = pick("resumen", "summary", "lineas", "líneas", "parte")
+    if isinstance(resumen, str):
+        resumen = [x.strip() + "." for x in resumen.replace("\n", " ").split(". ") if x.strip()][:3]
+    if not titular or not isinstance(resumen, list) or not resumen:
+        return None
+    as_list = lambda v: v if isinstance(v, list) else ([v] if v else [])
+    return {"titular": str(titular)[:90], "resumen": [str(x) for x in resumen[:3]],
+            "riesgos": [str(x) for x in as_list(pick("riesgos", "risks", "alertas"))[:4]],
+            "consejo": str(pick("consejo", "advice", "recomendacion", "recomendación") or ""),
+            "mejor_momento": str(pick("mejor_momento", "best_time", "mejor momento") or "")}
 
 
 def main():
