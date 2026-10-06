@@ -2,7 +2,7 @@
 /* Radar «a futuro»: lluvia prevista hora a hora (48 h) sobre el mapa del radar, a partir de una malla de puntos de Open-Meteo interpolada como imagen suave. */
 (function(){
 const RF={on:false,grid:null,layer:null,hour:0,times:[],data:null,timer:0,seq:0,bounds:null};
-const COLS=24,ROWS=18;
+const COLS=14,ROWS=10,CACHE=new Map();
 const STEPS=[[.1,'#9ed8f7'],[.5,'#4fb0ef'],[1,'#2a7fd8'],[2,'#35b44a'],[4,'#f4d03f'],[7,'#f08c2b'],[12,'#d93a3a']];
 const col=v=>{if(!(v>=.1))return null;let c=STEPS[0][1];for(const [t,h] of STEPS)if(v>=t)c=h;return c};
 const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
@@ -19,7 +19,7 @@ async function setMode(fc){RF.on=fc;$$('[data-rf]').forEach(b=>b.setAttribute('a
 async function load(){const r=S.radar;if(!r?.map)return;const m=r.map,pb=m.getPixelBounds(),z=m.getZoom(),dx=(pb.max.x-pb.min.x)/COLS,dy=(pb.max.y-pb.min.y)/ROWS;const pts=[];
  for(let i=0;i<ROWS;i++)for(let j=0;j<COLS;j++){const ll=m.unproject([pb.min.x+dx*(j+.5),pb.min.y+dy*(i+.5)],z);pts.push({lat:ll.lat,lon:L.Util.wrapNum?L.Util.wrapNum(ll.lng,[-180,180],true):ll.lng})}
  RF.bounds=L.latLngBounds(m.unproject(pb.min,z),m.unproject(pb.max,z));const seq=++RF.seq;$('#rfStatus').textContent='· cargando…';
- try{const url='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:pts.map(p=>p.lat.toFixed(3)).join(','),longitude:pts.map(p=>p.lon.toFixed(3)).join(','),hourly:'precipitation',forecast_hours:'48',timezone:'auto'});const res=await fetch(url);if(!res.ok)throw Error('Open-Meteo '+res.status);let d=await res.json();if(!Array.isArray(d))d=[d];if(seq!==RF.seq||!RF.on)return;RF.times=d[0].hourly.time;RF.data=d.map(x=>x.hourly.precipitation);RF.grid=pts;
+ try{const key=pts.map(p=>p.lat.toFixed(2)+','+p.lon.toFixed(2)).join(';'),hit=CACHE.get(key);let d;if(hit&&Date.now()-hit.at<1800000)d=hit.d;else{const url='https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:pts.map(p=>p.lat.toFixed(3)).join(','),longitude:pts.map(p=>p.lon.toFixed(3)).join(','),hourly:'precipitation',forecast_hours:'48',timezone:'auto'});const res=await fetch(url);if(!res.ok)throw Error('Open-Meteo '+res.status);d=await res.json();if(!Array.isArray(d))d=[d];CACHE.set(key,{at:Date.now(),d})}if(seq!==RF.seq||!RF.on)return;RF.times=d[0].hourly.time;RF.data=d.map(x=>x.hourly.precipitation);RF.grid=pts;
   $('#rfSlider').max=RF.times.length-1;ticks();if(!RF.loaded){const now=Date.now();RF.hour=Math.max(0,RF.times.findIndex(t=>new Date(t).getTime()>=now-1800000));RF.loaded=1}RF.hour=Math.min(RF.hour,RF.times.length-1);$('#rfSlider').value=RF.hour;paint();$('#rfStatus').textContent='· modelo de alta resolución vía Open-Meteo'}
  catch(e){if(seq===RF.seq)$('#rfStatus').textContent='· no se pudo cargar la previsión: '+e.message}}
 /* Pinta la malla en un lienzo diminuto y deja que el navegador lo amplíe con suavizado: transiciones continuas en lugar de cuadros. */

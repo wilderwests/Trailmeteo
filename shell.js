@@ -70,5 +70,6 @@ const gp=$('#pane-guide');if(gp)gp.innerHTML=`<header class="g-head"><p class="e
 gp?.addEventListener('click',e=>{const a=e.target.closest('.g-index a');if(!a)return;e.preventDefault();$(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth',block:'start'})});
 
 markActive();
+{const rk=$("#routeKnowledge");if(rk)$("#pane-route")?.append(rk)}
 globalThis.TMShell={go,markActive,nav:NAV};
 })();

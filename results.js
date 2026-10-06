@@ -3,7 +3,7 @@
    con navegación fija, y plan de seguridad para avisar a alguien antes de salir. */
 (function(){
 const RS={built:false,alarmExtra:90};
-const GROUPS=[['decision','Decisión'],['when','Cuándo salir'],['map','Mapa y perfil'],['sectors','Tramo a tramo'],['risks','Riesgos y avisos'],['pack','Mochila y agua'],['onroute','En ruta y seguridad']];
+const GROUPS=[['decision','Decisión'],['map','Track'],['sectors','Tiempo por tramo y hora'],['when','Cuándo salir'],['risks','Riesgos y avisos'],['pack','Mochila y agua'],['onroute','En ruta y seguridad']];
 const VERDICT={high:['STOP','Replantea la salida'],medium:['OJO','Sal con precauciones'],low:['GO','Ventana favorable'],unknown:['?','Datos incompletos']};
 const tm=t=>finite(t)?new Date(t).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'—';
 const dayTm=t=>finite(t)?new Date(t).toLocaleString('es-ES',{weekday:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
@@ -26,8 +26,8 @@ function build(){if(RS.built)return true;const rc=$('#routeContent');const ancho
  const sum=document.createElement('article');sum.id='rsSummary';sum.className='rs-summary';put('decision',sum);
  const parte=$('#goMeter')?.closest('article');if(parte){parte.id='rsParte';parte.classList.add('rs-parte');put('decision',parte)}
  put('when',$('#weekCard'));const rw=$('#routeWindows');if(rw){const c=document.createElement('article');c.className='card';c.id='rsDepartures';c.append(rw);put('when',c)}
- put('map',rc.querySelector('.route-grid'));put('map',card('Altitud y tiempo'));
- put('sectors',$('#routeForecast'));
+ put('map',rc.querySelector('.route-grid'));
+ put('sectors',$('#routeForecast'));put('sectors',card('Altitud y tiempo'));
  put('risks',card('Avisos oficiales'));put('risks',card('Incertidumbre'));put('risks',$('#terrainPanel'));
  put('pack',$('#gearCard'));put('pack',$('#routePoisCard'));
  const safety=document.createElement('article');safety.id='rsSafety';safety.className='card rs-safety';put('onroute',safety);put('onroute',card('Durante la marcha'));
