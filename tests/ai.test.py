@@ -32,6 +32,16 @@ class PartRules(unittest.TestCase):
         self.assertTrue(p["resumen"][1].startswith("Mañana, exigente"))
 
 
+class Normalize(unittest.TestCase):
+    def test_variants(self):
+        n = ai.normalize({"title": "Viento fuerte", "summary": "Hoy frío. Mañana lluvia. Ojo a crestas.", "risks": "Rachas"})
+        self.assertEqual(n["titular"], "Viento fuerte")
+        self.assertEqual(len(n["resumen"]), 3)
+        self.assertEqual(n["riesgos"], ["Rachas"])
+        self.assertIsNone(ai.normalize({"foo": 1}))
+        self.assertEqual(ai.normalize({"parte": {"titular": "X", "resumen": ["a", "b", "c"]}})["titular"], "X")
+
+
 class ParseJson(unittest.TestCase):
     def test_fenced_and_wrapped(self):
         self.assertEqual(ai.parse_json('```json\n{"a": 1}\n```'), {"a": 1})
