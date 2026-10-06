@@ -231,7 +231,8 @@ def normalize(p):
     if not titular or not isinstance(resumen, list) or not resumen:
         return None
     as_list = lambda v: v if isinstance(v, list) else ([v] if v else [])
-    return {"titular": str(titular)[:90], "resumen": [str(x) for x in resumen[:3]],
+    tidy = lambda x: str(x).strip().rstrip(".").strip() + "." if str(x).strip() else ""
+    return {"titular": str(titular).strip().rstrip(".")[:90], "resumen": [tidy(x) for x in resumen[:3] if str(x).strip()],
             "riesgos": [str(x) for x in as_list(pick("riesgos", "risks", "alertas"))[:4]],
             "consejo": str(pick("consejo", "advice", "recomendacion", "recomendación") or ""),
             "mejor_momento": str(pick("mejor_momento", "best_time", "mejor momento") or "")}
