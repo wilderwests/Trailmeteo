@@ -72,3 +72,76 @@ La geolocalización se usa localmente; las coordenadas meteorológicas se envía
 Qwen local se reutiliza entre plan de ruta, evidencias cartográficas, boletín AEMET y documentación. Generación solo al pulsar, exclusión mutua con la IA anterior y caché de 12 explicaciones para datos idénticos. El texto generado puede equivocarse y se separa de la documentación original. No consume créditos de Codex al funcionar en el dispositivo del visitante.
 
 Primera ficha revisada: Canal de Trea, con resúmenes atribuidos al refugio Vega de Ario, una reseña Wikiloc y un aviso histórico del Parque. Selección por nombre, no identidad geográfica del GPX. Las rutas sin ficha pueden buscar contexto enciclopédico mediante la API pública de Wikipedia; no equivale a búsqueda web universal ni a una reseña técnica. Las fichas no se actualizan automáticamente, conservan fecha de revisión y límites.
+
+## Versión 8: interfaz HUD, Wikiloc, canales y copiloto IA
+- **Arranque y navegación**: pantalla de inicio animada con sonido (Web Audio sintetizado, sin archivos; botón para silenciar) que entra directamente al planificador. Menú inferior fijo en móvil con iconos: Ruta, Tiempo, Radar, Montaña, Canales, Modelos.
+- **Diseño**: tema oscuro futurista, tipografía grande (Space Grotesk / Inter), animaciones que respetan «reducir movimiento». Fondos fotográficos difuminados de Wikimedia Commons, elegidos por sección, con autor y licencia visibles en el pie. Si no cargan, se usa un fondo generado.
+- **Wikiloc**: búsqueda de rutas públicas (DuckDuckGo vía Jina Reader). Al cargar una ruta se intenta leer su trazado de la página pública y se añaden altitudes del modelo digital (Open-Meteo). Wikiloc no tiene API pública: si exige sesión, la app guía la descarga del GPX en 3 pasos. También admite enlaces directos a `.gpx`.
+- **Canales del Cares**: guía visual con 15 fichas, filtros por sector, agua, trepada y duración, buscador, perfil de cotas citadas, pasos delicados, itinerario paso a paso, mapa de referencias (Nominatim), fuentes para contrastar e investigación IA del estado actual. Trea incluye la documentación complementaria fechada (refugio, reseña de 2026, avisos del Parque tras el incendio de 2025). El texto íntegro de 2003 se conserva debajo.
+- **Copiloto IA** (botón ✦): chat con el contexto real de la app (previsión, ruta y sectores, salidas alternativas, avisos, boletín AEMET, canal abierta, fuentes web recuperadas). Incluye atajos, dictado y lectura por voz. Usa **Gemini mediante Firebase AI Logic** (gratuito, con búsqueda en Google y fuentes citadas) si se configura en `firebase-config.js` o en ⚙ Ajustes del copiloto. Si no, recurre a un servicio comunitario gratuito (Pollinations); como opción queda la IA en el dispositivo. Los botones de explicación existentes usan el mismo motor.
+- **Semáforo GO / OJO / STOP**, **mochila según la previsión** (agua, luz, impermeable, isoterma frente a la cota máxima…) y **compartir plan**.
+- Pruebas nuevas: `tests/v8.mjs`.
+
+## Versión 9: diseño claro y modo «En ruta» para alta montaña
+- **Diseño**: claro y limpio, sin recuadros: secciones separadas por líneas finas, cifras grandes tipo instrumento, curvas de nivel animadas, foto difuminada en la cabecera, aparición al desplazar, contadores animados, onda al pulsar y menú inferior con 5 accesos (Ruta, En ruta, Tiempo, Radar, Más). Temas **Día**, **Noche** (rojo, conserva la visión nocturna y ahorra batería en OLED) y **Sol** (máximo contraste). Botón **SOS** fijo en la barra superior.
+- **En ruta** (`field.js`, cálculos en `field-core.js` sin conexión):
+  - Cabina GPS: altitud, recorrido hecho y restante, llegada estimada con el ritmo real, luz restante, distancia al track, desnivel, tiempo en marcha y ritmo.
+  - Avisos con sonido y vibración: fuera de ruta (umbral configurable), hora de retorno y vigilancia meteorológica cada 20 minutos en tu posición (tormenta, rachas, lluvia intensa). Pantalla siempre encendida (Wake Lock).
+  - Hora límite de retorno (ida y vuelta o travesía), con margen antes del ocaso. Sol, crepúsculo, hora dorada y fase lunar calculados en el dispositivo.
+  - Brújula (sensor del teléfono o rumbo GPS) que apunta al inicio, al final o a puntos guardados (coche, cruce…).
+  - Contador relámpago-trueno con distancia, tendencia y pautas de la regla 30/30.
+  - Grabación del track con recuperación si se cierra la web, exportación GPX y opción de usarlo como ruta.
+  - SOS: coordenadas en grados, UTM y GMS, llamada al 112, SMS con la posición, compartir, silbato y luz SOS en morse, y ficha para el rescate guardada solo en el dispositivo.
+- **Agua y refugios** (`pois.js`): fuentes, puntos de agua y refugios de OpenStreetMap a menos de 400 m del track, con su kilómetro, tramo más largo sin agua y marcadores en los mapas. Se guardan con la ruta.
+- Límite: con el teléfono bloqueado, iOS pausa el GPS de las webs; el seguimiento funciona con la app en primer plano.
+- Pruebas nuevas: `tests/field.test.cjs` (sol, UTM, rumbos, retorno, luna, track) y comprobaciones v9 en `tests/v8.mjs`.
+
+## Versión 10: planificar y decidir, con atmósfera
+Se retiran las funciones para usar durante la marcha (seguimiento GPS, grabación de track, brújula y SOS). La app se centra en **decidir antes de salir**.
+- **Estética**: clara y sin recuadros. Unbounded (titulares), IBM Plex Sans (texto) e IBM Plex Mono (datos); auroras difuminadas, grano fino, botones de cristal con borde iridiscente, apariciones con desenfoque y dock flotante. Navegación: **Planificar · Cielo · Terreno · Canales · Más**. Cielo agrupa previsión, radar, modelos y AEMET.
+- **Mapa de la semana** (`week.js`): calendario día × hora de salida para tu ruta, valorado con la previsión en cada sector, la luz y tu ritmo. Mejores ventanas destacadas; al tocar una casilla se replanifica.
+- **Mar de nubes** (`sky.js`): base y techo de la capa nubosa por niveles de presión (Open-Meteo), comparados con tu cota; diagrama y evolución en 24 h.
+- **Terreno** (`relief.js`): sol y sombra por sector a tu hora de paso con pendiente, orientación y horizonte reales (MDT Copernicus 90 m); riesgo de hielo y de calor; lluvia y nieve de 72 h, heladas, isoterma y cota de nieve aproximada; agua y refugios.
+- **Tu ritmo real** (`pace.js`): ajusta min/km y min/100 m a partir de un GPX tuyo con tiempos.
+- **Ensayo 3D** (`flyover.js`): vuelo sobre el relieve (MapLibre + AWS Terrain Tiles, ortofoto PNOA) con hora de paso y previsión de cada sector.
+- **Parte para el grupo** (`card.js`): imagen vertical con ruta, hora, semáforo, cifras, perfil coloreado, material y avisos.
+- **Canales de los tres macizos** (`canales.js`): catálogo de OpenStreetMap agrupado en Occidental, Central y Oriental. Ficha con mapa IGN (topográfico, ortofoto u OSM), perfil real, longitud, desnivel y pendiente máxima. Incluye accesos por abajo y por arriba (lugares, collados, refugios, pueblo y aparcamiento más cercanos), caminos que la cruzan con su km y dificultad, enlaces con otras canales, agua, horas de sol dentro de la canal para un día concreto, previsión, vuelo 3D, planificación y estado actual con IA. Las 15 fichas del Cares (Pyrenaica 2003) se integran en su canal.
+
+## Versión 11: cine de montaña, nieve, más modelos y cuentas
+Se retiran los avisos de mastines compartidos.
+- **Estética**: clara y limpia. Archivo (ancho variable) y JetBrains Mono. Detrás, fotografías propias de Picos (`img/`: mar de nubes desde una canal, niebla en la cresta y nieve recién caída; sin metadatos ni GPS) difuminadas con un lento movimiento de cámara, grano fino y **partículas en tiempo real** (`fx.js`): nieve con profundidad de campo, lluvia, niebla o motas de luz según el tiempo actual del lugar, con ráfagas de viento. Respeta «reducir movimiento» y se pausa en segundo plano.
+- **Sonido**: síntesis Web Audio con sala (reverberación generada), nuevos efectos y **viento ambiente** opcional (Más → Viento ambiente).
+- **Más modelos** (`modelsx.js`): además de ECMWF, ICON, GFS, Météo-France, GEM y MET Norway, se añaden UK Met Office, JMA, CMA, BOM, ECMWF AIFS (IA), AROME 1,5 km y HARMONIE, pedidos uno a uno para que un fallo no tumbe al resto. **Conjuntos** ECMWF ENS (51), GFS ENS (31) e ICON EPS (40): abanico P10–P90 de temperatura, probabilidad de lluvia y de rachas ≥ 50 km/h, con la franja de tu ruta. **Meteograma multimodelo** de 72 h con mediana.
+- **Nieve** (`snow.js`, en Terreno): espesor actual, nevada de los últimos 7 días y de los próximos 7 a la cota máxima de tu ruta, horas de fusión, **cota de nieve hora a hora** frente a tus cotas, **nieve sector a sector** a tu hora de paso, y **satélite** NASA GIBS (MODIS/VIIRS color real y cubierta de nieve NDSI) con selector de día. En la ficha de cada canal: nieve en su parte alta.
+- **Más fuentes de rutas** (`trails.js`): senderos señalizados GR/PR/SL de OpenStreetMap con trazado completo cargable, enlaces a Waymarked Trails, y búsqueda en Komoot, Outdooractive y AllTrails.
+- **Canales**: en la ficha, senderos señalizados que la recorren, tracks de Wikiloc superpuestos en el mapa y planificables, **pendiente coloreada** sobre el trazado con marcas de kilómetro, capa OpenTopoMap y capa de senderos PR·GR.
+- **Cuentas opcionales** (`account.js`): entra con Google para guardar tus rutas en la nube y sincronizarlas entre dispositivos, o usa la app **sin registrarte** (todo se guarda en el dispositivo).
+- **Buzón de sugerencias y contacto** (`contact.js`): Más → Buzón y contacto, y pie de página. Envía por correo a mariawilderwest@gmail.com y, si Firebase está configurado, también lo guarda en Firestore.
+
+### Activar las cuentas (gratis, plan Spark)
+1. Firebase → Authentication → Sign-in method → activa **Google**.
+2. Authentication → Settings → Dominios autorizados → añade el dominio de GitHub Pages.
+3. Firestore Database → crear (modo producción) y pega estas reglas:
+  ```
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{db}/documents {
+      match /users/{uid}/routes/{id} {
+        allow read, delete: if request.auth != null && request.auth.uid == uid;
+        allow create, update: if request.auth != null && request.auth.uid == uid
+          && request.resource.data.poly is string && request.resource.data.poly.size() < 600000;
+      }
+      match /feedback/{id} {
+        allow create: if request.resource.data.keys().hasOnly(['type','message','email','at','uid','page','ua'])
+          && request.resource.data.message is string && request.resource.data.message.size() < 4000;
+      }
+    }
+  }
+  ```
+4. La misma configuración web de Firebase del Copiloto (`firebase-config.js` o Copiloto → ⚙ Ajustes) sirve para las cuentas.
+
+## Versión 12: carretera, DGT y cadenas
+- **Cómo llegar** (`road.js`, en Más → Carretera, desde Planificar y desde la ficha de cada canal): escribe de dónde sales (o usa tu ubicación) y a dónde vas; por defecto el destino es el inicio de la ruta cargada. Si el nombre es ambiguo, se muestran los lugares candidatos para elegir el exacto (Nominatim/OpenStreetMap). Trayecto por carretera con alternativas (OSRM; Valhalla de respaldo), carreteras usadas, tiempo y hora de llegada, aviso si la carretera termina antes del destino y aparcamiento cartografiado más cercano.
+- **Avisos de la DGT en tu trayecto**: nieve, hielo, **niveles de cadenas** (verde, amarillo, rojo, negro), cortes, obras y accidentes sobre tu recorrido, con su km y la hora a la que pasarías; además, nieve, cadenas y cortes a menos de 25 km. Se marca si un aviso no estará vigente a tu hora y se recomienda la alternativa con menos avisos.
+- **Tiempo en la carretera**: previsión en puntos del trayecto a la hora de paso (temperatura, nieve, hielo probable, niebla, lluvia y viento), perfil coloreado y puntos altos o puertos. «Llegar a la hora de mi ruta» calcula la salida en coche.
+- **Datos DGT**: `scripts/update-dgt.py` lee el feed DATEX II oficial (Punto de Acceso Nacional y, de respaldo, infocar) y publica `data/dgt.json` con las incidencias del norte peninsular en cada despliegue, cada 20 minutos. Si la DGT no responde, la app lo indica en lugar de mostrar datos viejos.

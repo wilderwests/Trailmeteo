@@ -1,11 +1,11 @@
-name: Actualizar boletines de montaña
+name: Actualizar boletines de montaña y tráfico DGT
 on:
   schedule:
-    - cron: '23 * * * *'
+    - cron: '*/20 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['scripts/**', '.github/workflows/mountain.yml', '*.js', '*.css', '*.html']
+    paths: ['scripts/**', '.github/workflows/mountain.yml', '*.js', '*.css', '*.html', 'img/**']
 permissions:
   contents: read
   pages: write
@@ -29,14 +29,17 @@ jobs:
           npm install --ignore-scripts
           npm test
           python3 tests/alerts.test.py
+          python3 tests/dgt.test.py
       - name: Obtener boletines oficiales
         run: |
           python3 scripts/update-mountain.py
           python3 scripts/update-alerts.py
+          python3 scripts/update-dgt.py || true
       - name: Preparar web
         run: |
           mkdir -p public/data
           cp *.html *.css *.js *.png manifest.webmanifest public/
+          cp -r img public/
           cp data/*.json public/data/
       - uses: actions/upload-pages-artifact@v3
         with:

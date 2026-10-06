@@ -3,8 +3,8 @@
   "short_name": "TrailMeteo",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#08131e",
-  "theme_color": "#08131e",
+  "background_color": "#04070d",
+  "theme_color": "#04070d",
   "description": "Meteorología de montaña, radar y rutas GPX con fuentes abiertas.",
   "icons": [
     {
