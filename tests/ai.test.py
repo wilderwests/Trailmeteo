@@ -32,5 +32,12 @@ class PartRules(unittest.TestCase):
         self.assertTrue(p["resumen"][1].startswith("Mañana, exigente"))
 
 
+class ParseJson(unittest.TestCase):
+    def test_fenced_and_wrapped(self):
+        self.assertEqual(ai.parse_json('```json\n{"a": 1}\n```'), {"a": 1})
+        self.assertEqual(ai.parse_json('Aquí va: {"b": 2} y fin'), {"b": 2})
+        self.assertEqual(ai.parse_json('{"c": 3}'), {"c": 3})
+
+
 if __name__ == "__main__":
     unittest.main()
