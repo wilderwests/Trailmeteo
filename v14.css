@@ -234,3 +234,18 @@ input::placeholder,textarea::placeholder{color:#6b767b}
 .rf-mode button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
 .rf-ctl{display:flex;align-items:center;gap:10px;flex:1;min-width:260px}.rf-ctl input{flex:1}.rf-ctl b{min-width:140px;font-variant-numeric:tabular-nums}
 .rf-legend{font-size:.85rem;color:var(--ink-2)}.rf-legend i{display:inline-block;width:14px;height:10px;margin:0 3px 0 8px;vertical-align:middle;border-radius:2px}
+/* 14.3 · radar previsto y mar de nubes */
+.rf-bar{margin:4px 0 12px}
+.rf-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 10px}.rf-ctl[hidden],.rf-legend[hidden]{display:none}
+.rf-ctl input{flex:1;min-width:180px}.rf-ctl b{min-width:150px;font-size:1.05rem}
+.rf-legend{margin:0 0 12px}
+.radar-shell.rf-on .playrow,.radar-shell.rf-on #radarSlider,.radar-shell.rf-on .radar-controls>.sectionhead.small,.radar-shell.rf-on .legend,.radar-shell.rf-on .radar-options label.check{display:none!important}
+.radar-shell.rf-on .leaflet-radar-pane,.radar-shell.rf-on .leaflet-coverage-pane{visibility:hidden!important}
+.rf-img{image-rendering:auto}
+.sky-stack{aspect-ratio:16/9;height:auto!important;min-height:0;max-height:none;background:#9cc3dc}
+.sky-stack svg{display:block}
+.rf-track{position:relative;flex:1;min-width:220px;padding:30px 0 22px}.rf-track input{width:100%}
+.rf-bubble{position:absolute;top:0;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;font-size:.9rem;padding:2px 8px;border-radius:8px;white-space:nowrap;pointer-events:none}
+.rf-ticks{position:absolute;left:8px;right:8px;bottom:0;height:18px;font-size:.78rem;color:var(--muted)}.rf-ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.sky-hlbl{display:inline-block;min-width:120px;color:var(--ink);font-weight:700}
+.sky-stack{max-width:980px;margin-inline:auto}
