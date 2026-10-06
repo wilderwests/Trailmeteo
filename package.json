@@ -1,6 +1,6 @@
 {
   "name": "trailmeteo",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "private": true,
   "scripts": {
     "test": "node tests/core.test.cjs && node tests/integration.mjs && node tests/expedition.test.cjs && node tests/expedition-integration.mjs && node tests/public-sources.test.cjs && node tests/v8.mjs && node tests/field.test.cjs"

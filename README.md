@@ -1,4 +1,4 @@
-# TrailMeteo 13
+# TrailMeteo 14
 
 **https://wilderwests.github.io/Trailmeteo/** · PWA estática de meteorología y planificación de rutas de montaña. Abre `index.html` desde un servidor HTTP/HTTPS o publica todos los archivos de la raíz en GitHub Pages.
 
@@ -139,6 +139,19 @@ Se retiran los avisos de mastines compartidos.
   }
   ```
 4. La misma configuración web de Firebase del Copiloto (`firebase-config.js` o Copiloto → ⚙ Ajustes) sirve para las cuentas.
+
+## Versión 14: revista de montaña, menú completo, instrucciones y combustible
+
+- **Estilo «revista de montaña»**: títulos en Source Serif 4, texto en Source Sans 3, maquetación editorial con líneas finas en lugar de cajas y la fotografía de fondo.
+- **Bienvenida sin adornos** (sin los círculos): qué hace la app en tres líneas (Decide · Contrasta · Prepárate).
+- **Portada** que explica la app en cuatro pasos y todo lo que incluye.
+- **Menú superior con todas las opciones**, agrupadas (Ruta · Tiempo · Montaña · Ayuda), y el menú ☰ completo en el móvil.
+- **Planificar**: primero «Importa tu GPX» (recomendado) y después «¿No tienes el GPX? Búscala», con una nota que explica por qué es mejor el GPX. Se elimina la ruta a medida entre dos puntos.
+- **Resumen de resultados agrupado**: Recorrido · Duración · Meteorología en ruta · Agua. La mejor salida solo propone horas con luz (06:00–16:00).
+- **Instrucciones**: guía completa de todas las secciones (`shell.js`).
+- **Combustible** (`fuel.js`): busca alimentos por nombre y marca con los datos reales de **Open Food Facts** (por ejemplo «pan Bimbo natural» o «membrillo Hacendado»), añade cantidades y suma energía, hidratos, azúcares, fibra, proteínas, grasas, sal y micronutrientes. Lo compara con lo que pide tu salida (hidratos y sodio por hora, agua, gasto estimado según peso e intensidad). Incluye básicos sin marca, lector de código de barras (si el navegador lo admite) y respuestas del copiloto sobre comida.
+- **Ensayo 3D**: arreglado. El contenedor del mapa no tenía altura y además la ruta solo se dibujaba cuando cargaban todas las teselas. Ahora se dibuja en cuanto el estilo está listo, sobre la imagen de satélite de Esri, y la ortofoto del IGN queda de respaldo.
+- **Gemini**: se usan los modelos vigentes (`gemini-flash-lite-latest` y siguientes); si uno da error de cuota se prueba el siguiente. Firebase AI Logic tiene App Check aplicado: para usar Gemini desde la web hay que registrar la app en App Check (reCAPTCHA) o no aplicarlo para AI Logic.
 
 ## Versión 13: decidir de un vistazo, IA que siempre responde y rutas que se cargan solas
 

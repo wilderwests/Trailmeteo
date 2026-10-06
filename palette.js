@@ -17,6 +17,8 @@ const CMDS=[
  ['Cuenta y sincronización','cuenta google login','◉',more('account')],
  ['Buzón de sugerencias','buzon contacto sugerencia','✉',more('contact')],
  ['Abrir el copiloto IA','copiloto ia chat','✦',()=>globalThis.Copilot?.open()],
+ ['Combustible · comida y bebida','combustible comida calorias hidratos geles','◒',()=>globalThis.TMShell?.go('fuel')],
+ ['Instrucciones','ayuda guia instrucciones como funciona','?',()=>globalThis.TMShell?.go('guide')],
  ['Probar una ruta de ejemplo','ejemplo demo','◇',()=>{go('route')();setTimeout(()=>$('#demoRoute')?.click(),60)}],
  ['Importar un GPX','importar gpx archivo','↥',()=>{go('route')();$('#gpxInput')?.click()}],
  ['Analizar la ruta cargada','analizar ruta','▶',()=>{go('route')();if(S.route)analyzeRoute()}],
