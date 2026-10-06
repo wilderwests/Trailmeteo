@@ -216,3 +216,21 @@ p,li,dd,td{line-height:1.6}
 .bd-veil{background:color-mix(in srgb,var(--bg) 82%,transparent)!important}
 .pane,.home-screen{text-shadow:none}
 input::placeholder,textarea::placeholder{color:#6b767b}
+/* 14.2 · secciones y menú separados, nubes con proporción */
+.rs-group{margin-top:34px;padding:22px clamp(16px,2.6vw,30px) 28px;background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--rule);border-radius:10px;box-shadow:0 18px 40px -34px rgba(16,22,26,.45)}
+.rs-group .rs-head{border-top:0;padding-top:0;margin-bottom:10px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.rs-group .rs-head h2{font-size:clamp(1.5rem,3.6vw,2rem)}
+.rs-num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--paper)!important;font-size:.85rem!important;font-weight:800}
+.rs-body>article,.rs-body>section{padding-top:16px}
+.rs-body>article+article,.rs-body>section+article,.rs-body>article+section{margin-top:18px;border-top:1px solid var(--rule)}
+.rs-actions .action-row{margin:0;display:flex;flex-wrap:wrap;gap:8px}
+#rsParte>.action-row{display:none}
+@media (min-width:1000px){.mn-label{display:inline!important;margin-right:4px}.mn-group{padding:4px 8px 4px 10px!important;border:1px solid var(--rule)!important;border-radius:999px;background:color-mix(in srgb,var(--paper) 70%,transparent)}.mn-group:first-child{padding-left:10px!important}.mainnav{gap:10px!important}}
+.site-menu .sm-label{color:var(--accent)!important}
+.sky-stack{height:auto!important;aspect-ratio:16/9;max-height:560px;min-height:300px}
+.rf-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:10px 0}
+.rf-mode{display:flex;border:1px solid var(--rule-strong);border-radius:999px;overflow:hidden}
+.rf-mode button{border:0;border-radius:0;min-height:40px;padding:6px 16px;font-weight:600;background:none}
+.rf-mode button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.rf-ctl{display:flex;align-items:center;gap:10px;flex:1;min-width:260px}.rf-ctl input{flex:1}.rf-ctl b{min-width:140px;font-variant-numeric:tabular-nums}
+.rf-legend{font-size:.85rem;color:var(--ink-2)}.rf-legend i{display:inline-block;width:14px;height:10px;margin:0 3px 0 8px;vertical-align:middle;border-radius:2px}
