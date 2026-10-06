@@ -1,6 +1,6 @@
-# TrailMeteo 02
+# TrailMeteo 13
 
-PWA estática de meteorología de montaña para uso personal. Abre `index.html` desde un servidor HTTP/HTTPS o publica todos los archivos de la raíz en GitHub Pages.
+**https://wilderwests.github.io/Trailmeteo/** · PWA estática de meteorología y planificación de rutas de montaña. Abre `index.html` desde un servidor HTTP/HTTPS o publica todos los archivos de la raíz en GitHub Pages.
 
 ## Funciones
 - Tipografía grande, diseño adaptable, navegación por panorama, radar, GPX y fuentes.
@@ -120,7 +120,7 @@ Se retiran los avisos de mastines compartidos.
 
 ### Activar las cuentas (gratis, plan Spark)
 1. Firebase → Authentication → Sign-in method → activa **Google**.
-2. Authentication → Settings → Dominios autorizados → añade el dominio de GitHub Pages.
+2. Authentication → Settings → Dominios autorizados → añade el dominio de GitHub Pages (`wilderwests.github.io`).
 3. Firestore Database → crear (modo producción) y pega estas reglas:
   ```
   rules_version = '2';
@@ -139,6 +139,21 @@ Se retiran los avisos de mastines compartidos.
   }
   ```
 4. La misma configuración web de Firebase del Copiloto (`firebase-config.js` o Copiloto → ⚙ Ajustes) sirve para las cuentas.
+
+## Versión 13: decidir de un vistazo, IA que siempre responde y rutas que se cargan solas
+
+- **Tipografía Geist** (texto y cifras) en lugar de Archivo expandida: más legible, sin espaciados exagerados. Las etiquetas en mayúsculas pasan a sans seminegrita.
+- **Resultados ordenados para decidir** (`results.js`). Arriba, un resumen con veredicto GO / OJO / STOP, la hora de salida y la de llegada y diez cifras clave: distancia, desnivel, tu estimación, **horario MIDE**, cota máxima, temperatura, racha, lluvia, isoterma y **agua recomendada**. También muestra los riesgos principales con su km y hora, y las horas clave: **mejor salida** (se aplica con un toque), puesta de sol, **hora límite en la cota máxima** y aviso de regreso. Debajo van las secciones numeradas con navegación fija: Decisión · Cuándo salir · Mapa y perfil · Tramo a tramo · Riesgos y avisos · Mochila y agua · En ruta y seguridad.
+- **Plan de seguridad**: mensaje listo para WhatsApp o SMS con la ruta, el punto de salida (enlace de mapa), la hora de llegada y la hora a la que hay que llamar al 112. Incluye un **aviso en el calendario** (.ics con alarma). La app no envía nada por su cuenta.
+- **Buscar ruta con carga automática** (`finder.js`). Busca en los senderos de OpenStreetMap (relaciones PR, GR y SL y sendas con nombre) y en el catálogo de canales. Un toque carga el trazado, añade altitudes y lo analiza. Si los tramos con nombre están sueltos, los une siguiendo la red real de senderos con **BRouter**. Por ejemplo, la Ruta del Cares sale con unos 10,5 km.
+- **Ruta a medida**: de un punto a otro (por ejemplo, Poncebos → Caín), con ida y vuelta opcional, trazada por senderos con BRouter.
+- **Wikiloc**: Wikiloc bloquea la lectura automática de sus tracks (Cloudflare). Con un enlace suyo, TrailMeteo deduce el nombre de la ruta y **carga el mismo sendero desde OpenStreetMap**. Si quieres el track exacto del autor, descarga el GPX e impórtalo.
+- **Compartir a TrailMeteo**: en Android, «Compartir → TrailMeteo» desde la app de Wikiloc o desde Archivos carga el GPX o el enlace. En escritorio, los .gpx se abren con la app instalada (`share_target` y `file_handlers`).
+- **GPX para tu reloj**: exporta la ruta cargada o generada.
+- **Copiloto que siempre responde** (`copilot-expert.js`). Prueba en cadena Gemini (Firebase AI Logic) → **Gemini Nano integrado en Chrome** → IA comunitaria (Pollinations) → **motor propio**. El motor propio razona sin red con los datos reales de la app: tiempo, hora de salida, material, plan B, viento, lluvia, nieve, tormentas, AEMET, ritmo MIDE y carretera. Los fallos de configuración de Firebase ya no provocan esperas. En ⚙ Ajustes se elige el proveedor y se puede activar Gemini Nano.
+- **Parte del día con IA** (`scripts/update-ai.py`, `parte.js`). En cada despliegue, GitHub Actions redacta el parte de Picos con **GitHub Models**, gratis con el `GITHUB_TOKEN` del workflow (permiso `models: read`). Parte de Open-Meteo, AEMET y DGT. Si no hay IA, se calcula por reglas. Se muestra en Cielo y lo usa el copiloto.
+- **Paleta de comandos** `⌘K` / `Ctrl+K` / `/`: cualquier sección, buscar ruta o lugar y preguntar al copiloto.
+- Pruebas nuevas: `tests/ai.test.py` y el bloque v13 de `tests/v8.mjs`.
 
 ## Versión 12: carretera, DGT y cadenas
 - **Cómo llegar** (`road.js`, en Más → Carretera, desde Planificar y desde la ficha de cada canal): escribe de dónde sales (o usa tu ubicación) y a dónde vas; por defecto el destino es el inicio de la ruta cargada. Si el nombre es ambiguo, se muestran los lugares candidatos para elegir el exacto (Nominatim/OpenStreetMap). Trayecto por carretera con alternativas (OSRM; Valhalla de respaldo), carreteras usadas, tiempo y hora de llegada, aviso si la carretera termina antes del destino y aparcamiento cartografiado más cercano.
