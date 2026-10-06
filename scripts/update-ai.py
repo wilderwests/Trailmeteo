@@ -124,6 +124,21 @@ def rules(data):
     }
 
 
+def parse_json(text):
+    """Acepta JSON puro, envuelto en ```json … ``` o con texto alrededor."""
+    t = text.strip()
+    if t.startswith("```"):
+        t = t.split("\n", 1)[1] if "\n" in t else t[3:]
+        t = t.rsplit("```", 1)[0]
+    try:
+        return json.loads(t)
+    except json.JSONDecodeError:
+        i, j = t.find("{"), t.rfind("}")
+        if i >= 0 and j > i:
+            return json.loads(t[i:j + 1])
+        raise
+
+
 def ask_models(data, token):
     system = (
         "Eres un meteorólogo y guía de montaña de Picos de Europa. Redacta un parte breve, concreto y útil para "
@@ -145,12 +160,12 @@ def ask_models(data, token):
             )
             with urllib.request.urlopen(req, timeout=60) as r:
                 d = json.loads(r.read().decode("utf-8"))
-            text = d["choices"][0]["message"]["content"]
-            parsed = json.loads(text)
+            text = d["choices"][0]["message"]["content"] or ""
+            parsed = parse_json(text)
             if parsed.get("titular") and isinstance(parsed.get("resumen"), list):
                 return model, parsed
         except Exception as e:  # noqa: BLE001 - se informa y se prueba el siguiente
-            last = e
+            last = f"{model}: {e}" + (f" · respuesta: {text[:160]!r}" if "text" in locals() and text else "")
     raise RuntimeError(f"GitHub Models no disponible: {last}")
 
 
