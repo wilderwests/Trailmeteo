@@ -37,11 +37,14 @@ jobs:
           python3 tests/ai.test.py
           python3 tests/aludes.test.py
           python3 tests/v17.test.py
+          python3 tests/foros.test.py
           pip install -q --break-system-packages rasterio pillow numpy || pip install -q rasterio pillow numpy
           python3 tests/snowmap.test.py
       - name: Fecha para cachés diarias
         id: day
-        run: echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+          echo "hour=$(date -u +%Y-%m-%d-%H)" >> "$GITHUB_OUTPUT"
       - name: Nieve observada Sentinel-2 y validación (caché diaria)
         id: snowmap
         uses: actions/cache@v4
@@ -75,6 +78,13 @@ jobs:
           path: data/skitour.json
           key: skitour-${{ steps.day.outputs.day }}
           restore-keys: skitour-
+      - name: Foros y noticias (caché de una hora)
+        id: foros
+        uses: actions/cache@v4
+        with:
+          path: data/foros.json
+          key: foros-${{ steps.day.outputs.hour }}
+          restore-keys: foros-
       - name: Precios y plazas de refugios (caché diaria)
         id: refugios
         uses: actions/cache@v4
@@ -117,6 +127,10 @@ jobs:
         if: steps.skitour.outputs.cache-hit != 'true' || hashFiles('data/skitour.json') == ''
         timeout-minutes: 4
         run: timeout 200 python3 scripts/update-skitour.py || true
+      - name: Foros y noticias si la copia no es de esta hora
+        if: steps.foros.outputs.cache-hit != 'true'
+        timeout-minutes: 3
+        run: timeout 150 python3 scripts/update-foros.py || true
       - name: Refugios si la copia no es de hoy
         if: steps.refugios.outputs.cache-hit != 'true'
         timeout-minutes: 3

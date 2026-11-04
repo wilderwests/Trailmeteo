@@ -2,7 +2,7 @@
 /* Presentación: arranque, sonido sintetizado con sala, viento ambiente, partículas cinematográficas y fotografía de fondo con atribución. */
 const FX={ctx:null,muted:false,themes:{},current:null,layer:0,photoSeq:0};
 try{FX.muted=localStorage.getItem('tm.sound')==='off'}catch{}
-const TAB_IDS=['route','now','terrain','nieve','canales','radar','models','mountain','mapa','webcams','refugios','road','fuel','guide'];
+const TAB_IDS=['route','now','terrain','nieve','canales','radar','models','mountain','mapa','webcams','refugios','road','fuel','guide','foros'];
 
 /* ---------- Sonido: Web Audio, sin archivos ---------- */
 function audio(){if(FX.muted)return null;const AC=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AC)return null;try{if(!FX.ctx)FX.ctx=new AC();if(FX.ctx.state==='suspended')FX.ctx.resume();return FX.ctx}catch{return null}}

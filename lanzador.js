@@ -11,6 +11,7 @@ const SECTIONS=[
  ['refugios','Refugios','Tiempo, temporada, precios y webcam','<path d="M3 20 12 5l9 15Z"/><path d="M9 20v-5h6v5"/>','img/andara-900.jpg'],
  ['nieve','Nieve y aludes','Cota, manto, satélite y boletín','<path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/>','img/nieve.jpg'],
  ['webcams','Webcams','Cámaras en directo de Picos','<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',''],
+ ['foros','Foros y noticias','Boletines, foros de meteo y prensa local','<path d="M4 5h12v9H8l-4 4Z"/><path d="M16 9h4v9l-3-3h-6v-1"/>',''],
  ['radar','Radar','Lluvia observada ahora','<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12 19 6"/>',''],
  ['models','Modelos','Compara ECMWF, ICON, GFS…','<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',''],
  ['mountain','AEMET montaña','Boletín oficial y avisos','<path d="M2 20 9 7l4 7 3-4 6 10Z"/>',''],
@@ -21,7 +22,7 @@ const SECTIONS=[
  ['library','Mis rutas','Guardadas en el dispositivo o tu cuenta','<path d="M6 3h12v18l-6-4-6 4Z"/>',''],
  ['copilot','Copiloto IA','Pregunta qué hacer y cuándo salir','<path d="M12 3l1.8 4.6L18.5 9l-4.7 1.6L12 15l-1.8-4.4L5.5 9l4.7-1.4Z"/>',''],
  ['guide','Instrucciones','Cómo se usa todo, paso a paso','<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01"/>','']];
-const DOCK=['route','now','mapa','refugios','nieve','webcams','radar','terrain','models','mountain','canales','road','fuel','library','copilot'];
+const DOCK=['route','now','mapa','refugios','nieve','webcams','foros','radar','terrain','models','mountain','canales','road','fuel','library','copilot'];
 
 /* ---------- Menú de inicio ---------- */
 function wxText(){const d=S.forecast,c=d?.current;if(!c)return'Previsión por horas, ficha del sitio y avisos';return`${esc(S.location?.name||'')}: ${Math.round(c.temperature_2m)}°${typeof weather==='function'?' · '+esc(weather(c.weather_code)?.[1]||''):''}`}
@@ -35,7 +36,7 @@ const prevRender=typeof renderNow==='function'?renderNow:null;if(prevRender){ren
 
 /* ---------- Barra inferior completa y deslizable ---------- */
 function dock(){const nav=$('.tabs');if(!nav||nav.dataset.full)return;nav.dataset.full='1';const more=$('#dockMore'),have=new Set([...nav.querySelectorAll('[data-tab],[data-nav]')].map(b=>b.dataset.tab||b.dataset.nav));
- const label={refugios:'Refugios',webcams:'Webcams',radar:'Radar',models:'Modelos',mountain:'AEMET',canales:'Canales',road:'Carretera',fuel:'Comida',library:'Mis rutas',copilot:'Copiloto'};
+ const label={refugios:'Refugios',webcams:'Webcams',foros:'Foros',radar:'Radar',models:'Modelos',mountain:'AEMET',canales:'Canales',road:'Carretera',fuel:'Comida',library:'Mis rutas',copilot:'Copiloto'};
  for(const k of DOCK){if(have.has(k))continue;const s=SECTIONS.find(x=>x[0]===k);if(!s)continue;more?.insertAdjacentHTML('beforebegin',`<button type="button" data-nav="${k}" class="dock-x">${I(s[3])}<span>${label[k]||s[1]}</span></button>`)}
  const order=DOCK.map(k=>nav.querySelector(`[data-tab="${k}"],[data-nav="${k}"]`)).filter(Boolean);for(const b of order)nav.insertBefore(b,more||null);nav.classList.add('tabs-scroll')}
 function centerActive(){const nav=$('.tabs.tabs-scroll');if(!nav||nav.scrollWidth<=nav.clientWidth+4)return;const t=S.tab,sky=['now','radar','models','mountain','webcams'].includes(t)&&!nav.querySelector(`[data-nav="${t}"]`)?'now':t,b=nav.querySelector(`[data-tab="${sky}"],[data-nav="${sky}"]`);if(!b)return;nav.querySelectorAll('.dock-x').forEach(x=>x.classList.toggle('active',x===b));const l=b.offsetLeft-(nav.clientWidth-b.offsetWidth)/2;nav.scrollTo({left:Math.max(0,l),behavior:'smooth'})}
